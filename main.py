@@ -1,23 +1,41 @@
-from Tkinter import *
+from tkinter import *
+from tkinter import filedialog
+import os
 
-def callback():
-    print "called the callback!"
+def selectTerm():
+    term = Tk()
 
-root = Tk()
+    frame = Frame(term)
+    frame.grid()
 
-# create a menu
-menu = Menu(root)
-root.config(menu=menu)
+    Label(term, text="Open Existing Term").grid(row=0)
+    Label(term, text="Create New Term").grid(row=1)
 
-filemenu = Menu(menu)
-menu.add_cascade(label="File", menu=filemenu)
-filemenu.add_command(label="New", command=callback)
-filemenu.add_command(label="Open...", command=callback)
-filemenu.add_separator()
-filemenu.add_command(label="Exit", command=callback)
+    openButton = Button(term, text="Open", command=openTerm)
+    newtermname = Entry(term)
+    newTermButton = Button(term, text="Create", command=createTerm)
 
-helpmenu = Menu(menu)
-menu.add_cascade(label="Help", menu=helpmenu)
-helpmenu.add_command(label="About...", command=callback)
+    openButton.grid(row=0, column=1)
+    newtermname.grid(row=1, column=1)
+    newTermButton.grid(row=1, column=2)
 
-mainloop()
+    term.mainloop()
+
+def createTerm():
+    path = "/Users/bdunk/s/grades/Terms/"+newtermname.get()
+    os.mkdir(path)
+    selectCourse(path)
+
+def openTerm():
+    while True:
+        path = filedialog.askopenfilename(initialdir="/Users/bdunk/s/grades/Terms/")
+        if(path!=""):
+            break
+    print(path)
+    selectCourse(path)
+
+def selectCourse(path):
+    course = Toplevel()
+
+
+selectTerm()
