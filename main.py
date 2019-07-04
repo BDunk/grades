@@ -1,41 +1,42 @@
 from tkinter import *
-from tkinter import filedialog
 import os
 
-def selectTerm():
-    term = Tk()
+class TermPage(Frame):
+    def __init__(self, parent):
+        Frame.__init__(self, parent)
+        self.parent=parent
+        self.grid()
+        a=0
+        for x in os.listdir("/Users/bdunk/s/grades/Terms"):
+           if (x != ".DS_Store"):
+                Label(parent, text=x).grid(row=a, column=0)
+                open=Button(parent, text="Open", command=lambda : self.openterm(parent,("/Users/bdunk/s/grades/Terms/"+x)))
+                open.grid(row=a, column=1)
+                a=a+1
 
-    frame = Frame(term)
-    frame.grid()
+        new_file_name=Entry(parent)
+        new_file_name.grid(row=a, column=0)
 
-    Label(term, text="Open Existing Term").grid(row=0)
-    Label(term, text="Create New Term").grid(row=1)
+        newfilebutton=Button(parent, text="Create", command= lambda: self.createterm(new_file_name)).grid(row=a, column=1)
 
-    openButton = Button(term, text="Open", command=openTerm)
-    newtermname = Entry(term)
-    newTermButton = Button(term, text="Create", command=createTerm)
+    def createterm(self, entry):
+        os.mkdir("/Users/bdunk/s/grades/Terms/"+entry.get())
+        self.openterm(self.parent,"/Users/bdunk/s/grades/Terms/"+entry.get())
 
-    openButton.grid(row=0, column=1)
-    newtermname.grid(row=1, column=1)
-    newTermButton.grid(row=1, column=2)
-
-    term.mainloop()
-
-def createTerm():
-    path = "/Users/bdunk/s/grades/Terms/"+newtermname.get()
-    os.mkdir(path)
-    selectCourse(path)
-
-def openTerm():
-    while True:
-        path = filedialog.askopenfilename(initialdir="/Users/bdunk/s/grades/Terms/")
-        if(path!=""):
-            break
-    print(path)
-    selectCourse(path)
-
-def selectCourse(path):
-    course = Toplevel()
+    def openterm(self, parent, term_path):
+        print(term_path)
 
 
-selectTerm()
+class CoursePage(Frame):
+    def __init__(self, parent, termPath):
+        Frame.__init__(self, parent)
+
+
+class AssignmentPage(Frame):
+    def __init__(self, parent):
+        Frame.__init__(self, parent)
+
+
+window = Tk()
+term=TermPage(window)
+window.mainloop()
